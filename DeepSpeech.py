@@ -607,8 +607,8 @@ def train(server=None):
                         step_summary_writer.add_summary(step_summary, current_step)
 
                         # Uncomment the next line for debugging race conditions / distributed TF
-                        if counter%100 == 0:
-                             log_info('Finished batch step %d - %f' % (counter, (time.time()-time_stat)/100))
+                        if counter%10 == 0:
+                             log_info('Finished batch step %d - %f' % (counter, (time.time()-time_stat)/10))
                              time_stat = time.time()
 
                         # Add batch to loss
