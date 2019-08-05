@@ -14,6 +14,7 @@ import progressbar
 import shutil
 import tensorflow as tf
 import traceback
+import time
 
 from ds_ctcdecoder import ctc_beam_search_decoder, Scorer
 from six.moves import zip, range
@@ -558,6 +559,8 @@ def train(server=None):
                 # Get the first job
                 job = coord.get_job()
 
+                time_stat = time.time()
+                counter=0
                 while job and not session.should_stop():
                     log_debug('Computing %s...' % job)
 
@@ -592,6 +595,7 @@ def train(server=None):
 
                     # Loop over the batches
                     for job_step in range(job.steps):
+                        counter+=1
                         if session.should_stop():
                             break
 
@@ -603,7 +607,9 @@ def train(server=None):
                         step_summary_writer.add_summary(step_summary, current_step)
 
                         # Uncomment the next line for debugging race conditions / distributed TF
-                        log_debug('Finished batch step %d.' % current_step)
+                        if counter%100 == 0:
+                             log_info('Finished batch step %d - %f' % (counter, (time.time()-time_stat)/100))
+                             time_stat = time.time()
 
                         # Add batch to loss
                         total_loss += batch_loss
@@ -889,6 +895,10 @@ def main(_):
             # Only one local task: this process (default case - no cluster)
             with tf.Graph().as_default():
                 tf.set_random_seed(FLAGS.random_seed)
+                parameter_value_map = {}
+                for key in FLAGS.__flags.keys():
+                    parameter_value_map[key] = FLAGS.__flags[key].value
+                print("Parameters: {}".format(parameter_value_map))
                 train()
             # Now do a final test epoch
             if FLAGS.test:
