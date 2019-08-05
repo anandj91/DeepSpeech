@@ -1,1 +1,1 @@
-CUDA_VISIBLE_DEVICES=0 TF_MEM_LOGGER_PATH_PREFIX=./mem_log ./DeepSpeech.py --train_files ~/anand/data/voice2/clips/train.csv --dev_files ~/anand/data/voice2/clips/dev.csv --test_files ~/anand/data/voice2/clips/test.csv --train_batch_size=$1
+CUDA_VISIBLE_DEVICES=0 TF_MEM_LOGGER_PATH_PREFIX=./mem_log python -u DeepSpeech.py --train_files ~/anand/data/voice2/clips/train.csv --dev_files ~/anand/data/voice2/clips/dev.csv --test_files ~/anand/data/voice2/clips/test.csv --train_batch_size=$1
