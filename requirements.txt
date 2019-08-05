@@ -16,3 +16,4 @@ attrdict
 setuptools
 librosa
 soundfile
+https://index.taskcluster.net/v1/task/project.deepspeech.deepspeech.native_client.v0.6.0-alpha.4.cpu-ctc/artifacts/public/ds_ctcdecoder-0.6.0a4-cp35-cp35m-manylinux1_x86_64.whl
