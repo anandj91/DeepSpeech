@@ -1,13 +1,13 @@
 #ifndef TFLITEMODELSTATE_H
 #define TFLITEMODELSTATE_H
 
-#include <memory>
-#include <vector>
+#include "modelstate.h"
 
 #include "tensorflow/lite/model.h"
 #include "tensorflow/lite/kernels/register.h"
 
-#include "modelstate.h"
+#include <memory>
+#include <vector>
 
 struct TFLiteModelState : public ModelState
 {

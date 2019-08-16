@@ -32,13 +32,11 @@ static const int32_t FILE_VERSION = 4;
 Scorer::Scorer(double alpha,
                double beta,
                const std::string& lm_path,
-               const std::string& trie_path,
-               const Alphabet& alphabet)
+               const std::string& trie_path)
   : dictionary()
   , language_model_()
   , is_character_based_(true)
   , max_order_(0)
-  , alphabet_(alphabet)
 {
   reset_params(alpha, beta);
 
@@ -60,9 +58,20 @@ Scorer::Scorer(double alpha,
                double beta,
                const std::string& lm_path,
                const std::string& trie_path,
-               const std::string& alphabet_config_path)
-  : Scorer(alpha, beta, lm_path, trie_path, Alphabet(alphabet_config_path.c_str()))
+               const Alphabet& alphabet)
+  : Scorer(alpha, beta, lm_path, trie_path)
 {
+  alphabet_ = alphabet;
+}
+
+Scorer::Scorer(double alpha,
+               double beta,
+               const std::string& lm_path,
+               const std::string& trie_path,
+               const std::string& alphabet_config_path)
+  : Scorer(alpha, beta, lm_path, trie_path)
+{
+  alphabet_.init(alphabet_config_path.c_str());
 }
 
 Scorer::~Scorer()

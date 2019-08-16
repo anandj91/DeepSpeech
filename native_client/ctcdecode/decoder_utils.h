@@ -53,16 +53,16 @@ T log_sum_exp(const T &x, const T &y) {
 }
 
 // Get pruned probability vector for each time step's beam search
-std::vector<std::pair<size_t, float>> get_pruned_log_probs(
+std::vector<std::pair<int, float>> get_pruned_log_probs(
     const double *prob_step,
-    size_t class_dim,
+    int class_dim,
     double cutoff_prob,
-    size_t cutoff_top_n);
+    int cutoff_top_n);
 
 // Get beam search result from prefixes in trie tree
 std::vector<Output> get_beam_search_result(
     const std::vector<PathTrie *> &prefixes,
-    size_t top_paths);
+    int top_paths);
 
 // Functor for prefix comparsion
 bool prefix_compare(const PathTrie *x, const PathTrie *y);
@@ -72,7 +72,7 @@ bool prefix_compare_external(const PathTrie *x, const PathTrie *y, const std::un
 /* Get length of utf8 encoding string
  * See: http://stackoverflow.com/a/4063229
  */
-size_t get_utf8_str_len(const std::string &str);
+int get_utf8_str_len(const std::string &str);
 
 /* Split a string into a list of strings on a given string
  * delimiter. NB: delimiters on beginning / end of string are

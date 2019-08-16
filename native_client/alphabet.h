@@ -15,7 +15,7 @@
  */
 class Alphabet {
 public:
-  Alphabet(const char *config_file) {
+  int init(const char *config_file) {
     std::ifstream in(config_file, std::ios::in);
     unsigned int label = 0;
     space_label_ = -2;
@@ -35,6 +35,7 @@ public:
     }
     size_ = label;
     in.close();
+    return 0;
   }
 
   const std::string& StringFromLabel(unsigned int label) const {

@@ -1,5 +1,6 @@
 #include "tflitemodelstate.h"
 
+#include <deque>
 using namespace tflite;
 using std::vector;
 

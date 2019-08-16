@@ -4,24 +4,24 @@
 #include <cmath>
 #include <limits>
 
-std::vector<std::pair<size_t, float>> get_pruned_log_probs(
+std::vector<std::pair<int, float>> get_pruned_log_probs(
     const double *prob_step,
-    size_t class_dim,
+    int class_dim,
     double cutoff_prob,
-    size_t cutoff_top_n) {
+    int cutoff_top_n) {
   std::vector<std::pair<int, double>> prob_idx;
-  for (size_t i = 0; i < class_dim; ++i) {
+  for (int i = 0; i < class_dim; ++i) {
     prob_idx.push_back(std::pair<int, double>(i, prob_step[i]));
   }
   // pruning of vacobulary
-  size_t cutoff_len = class_dim;
+  int cutoff_len = class_dim;
   if (cutoff_prob < 1.0 || cutoff_top_n < cutoff_len) {
     std::sort(
         prob_idx.begin(), prob_idx.end(), pair_comp_second_rev<int, double>);
     if (cutoff_prob < 1.0) {
       double cum_prob = 0.0;
       cutoff_len = 0;
-      for (size_t i = 0; i < prob_idx.size(); ++i) {
+      for (int i = 0; i < prob_idx.size(); ++i) {
         cum_prob += prob_idx[i].second;
         cutoff_len += 1;
         if (cum_prob >= cutoff_prob || cutoff_len >= cutoff_top_n) break;
@@ -30,8 +30,8 @@ std::vector<std::pair<size_t, float>> get_pruned_log_probs(
     prob_idx = std::vector<std::pair<int, double>>(
         prob_idx.begin(), prob_idx.begin() + cutoff_len);
   }
-  std::vector<std::pair<size_t, float>> log_prob_idx;
-  for (size_t i = 0; i < cutoff_len; ++i) {
+  std::vector<std::pair<int, float>> log_prob_idx;
+  for (int i = 0; i < cutoff_len; ++i) {
     log_prob_idx.push_back(std::pair<int, float>(
         prob_idx[i].first, log(prob_idx[i].second + NUM_FLT_MIN)));
   }
@@ -41,9 +41,9 @@ std::vector<std::pair<size_t, float>> get_pruned_log_probs(
 
 std::vector<Output> get_beam_search_result(
     const std::vector<PathTrie *> &prefixes,
-    size_t top_paths) {
+    int top_paths) {
   std::vector<Output> output_vecs;
-  for (size_t i = 0; i < top_paths && i < prefixes.size(); ++i) {
+  for (int i = 0; i < top_paths && i < prefixes.size(); ++i) {
     Output output;
     prefixes[i]->get_path_vec(output.tokens, output.timesteps);
     output.probability = -prefixes[i]->approx_ctc;
@@ -53,8 +53,8 @@ std::vector<Output> get_beam_search_result(
   return output_vecs;
 }
 
-size_t get_utf8_str_len(const std::string &str) {
-  size_t str_len = 0;
+int get_utf8_str_len(const std::string &str) {
+  int str_len = 0;
   for (char c : str) {
     str_len += ((c & 0xc0) != 0x80);
   }
@@ -83,9 +83,9 @@ std::vector<std::string> split_utf8_str(const std::string &str) {
 std::vector<std::string> split_str(const std::string &s,
                                    const std::string &delim) {
   std::vector<std::string> result;
-  std::size_t start = 0, delim_len = delim.size();
+  int start = 0, delim_len = delim.size();
   while (true) {
-    std::size_t end = s.find(delim, start);
+    int end = s.find(delim, start);
     if (end == std::string::npos) {
       if (start < s.size()) {
         result.push_back(s.substr(start));

@@ -46,6 +46,10 @@ public:
   Scorer(double alpha,
          double beta,
          const std::string &lm_path,
+         const std::string &trie_path);
+  Scorer(double alpha,
+         double beta,
+         const std::string &lm_path,
          const std::string &trie_path,
          const Alphabet &alphabet);
   Scorer(double alpha,
